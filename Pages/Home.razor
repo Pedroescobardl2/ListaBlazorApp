@@ -1,0 +1,122 @@
+﻿@page "/"
+
+@using ListaBlazorApp.Models
+@using ListaBlazorApp.Services
+
+<h3>Lista Enlazada Simple</h3>
+
+@if (lista == null)
+{
+    <p>Cargando...</p>
+}
+else
+{
+    <p>Cantidad de nodos en la lista: @lista.CantidadNodos</p>
+
+    <input @bind="nuevoNodoTexto" />
+    <button @onclick="AgregarNodoInicio">Agregar Nodo al Inicio</button>
+    <button @onclick="AgregarNodoFinal">Agregar Nodo al Final</button>
+    <button @onclick="BuscarNodo">Buscar Nodo</button>
+
+    <ul>
+        @foreach (Nodo nodo in lista)
+        {
+            <li>@nodo.Informacion</li>
+        }
+    </ul>
+
+    @code {
+    ListaEnlazadaSimple lista;
+        
+
+    public ListaEnlazadaSimple lista { get; set; } = new();
+
+
+    protected override void OnInitialized()
+    {
+        lista = new ListaEnlazadaSimple();
+
+      
+    }
+
+    private void AgregarNodoInicio()
+    {
+        if (!string.IsNullOrWhiteSpace(nuevoNodoTexto))
+        {
+            Nodo nuevoNodo = new Nodo { Informacion = nuevoNodoTexto };
+            lista.AgregarNodoAlInicio(nuevoNodo);
+            nuevoNodoTexto = string.Empty;
+            StateHasChanged();
+        }
+    }
+
+    private void AgregarNodoFinal()
+    {
+        Nodo nuevoNodo = new Nodo(); 
+        lista.AgregarNodoAlFinal(nuevoNodo);
+        StateHasChanged(); 
+    }
+
+    private void AgregarNodoAntesDe()
+    {
+        object informacion = ""; 
+        Nodo nuevoNodo = new Nodo(); 
+        string mensaje = lista.AgregarNodoAntesDe(informacion, nuevoNodo);
+        StateHasChanged(); 
+    }
+
+    private void AgregarNodoDespuesDe()
+    {
+        object informacion = ""; 
+        Nodo nuevoNodo = new Nodo(); 
+        string mensaje = lista.AgregarNodoDespuesDe(informacion, nuevoNodo);
+        StateHasChanged(); 
+    }
+
+    private void AgregarNodoEnPosicion()
+    {
+        int posicion = 5; 
+        Nodo nuevoNodo = new Nodo();
+        string mensaje = lista.AgregarNodoEnPosicion(posicion, nuevoNodo);
+        StateHasChanged(); 
+    }
+
+    private void AgregarNodoAntesDePosicion()
+    {
+        int posicion = 5; 
+        Nodo nuevoNodo = new Nodo(); 
+        string mensaje = lista.AgregarNodoAntesDePosicion(posicion, nuevoNodo);
+        StateHasChanged();
+    }
+
+    private void AgregarNodoDespuesDePosicion()
+    {
+        int posicion = 5; 
+        Nodo nuevoNodo = new Nodo(); 
+        string mensaje = lista.AgregarNodoDespuesDePosicion(posicion, nuevoNodo);
+        StateHasChanged(); 
+    }
+
+    private void RecorrerLista()
+    {
+        lista.RecorrerLista(lista.PrimerNodo, nodo =>
+        {
+            
+            Console.WriteLine(nodo.Informacion);
+        });
+    }
+
+    private void BuscarNodo()
+    {
+        object informacion = ""; 
+        Nodo nodoEncontrado = lista.BuscarNodo(informacion);
+        if (nodoEncontrado != null)
+        {
+            Console.WriteLine("Nodo encontrado: " + nodoEncontrado.Informacion);
+        }
+        else
+        {
+            Console.WriteLine("Nodo no encontrado.");
+        }
+    }
+}
